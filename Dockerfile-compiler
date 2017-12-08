@@ -1,0 +1,20 @@
+FROM gcr.io/google-containers/debian-base-amd64:0.1
+LABEL Description="Fluent Bit COMPILER docker image"
+
+RUN apt-get -qq update \
+    && apt-get install -y -qq \
+       build-essential \
+       cmake \
+       make \
+       wget \
+       unzip \
+       libsystemd-dev \
+       git 
+
+COPY container-script.sh /container-script.sh
+COPY settings.conf /settings.conf
+RUN chmod 755 /container-script.sh
+
+# Entry point
+CMD [ "/container-script.sh" ]
+

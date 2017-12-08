@@ -1,0 +1,18 @@
+FROM gcr.io/google-containers/debian-base-amd64:0.1
+LABEL Description="Fluent Bit docker image"
+
+RUN mkdir -p /fluent-bit/bin /fluent-bit/etc /fluent-bit/log
+
+RUN apt-get -qq update \
+    && apt-get install -y -qq --no-install-recommends ca-certificates
+
+# Configuration files
+COPY conf/* /fluent-bit/etc/
+
+# Install the executable
+COPY target/fluent-bit /fluent-bit/bin/fluent-bit
+RUN chmod 755 /fluent-bit/bin/fluent-bit
+
+# Entry point
+CMD ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.conf"]
+
